@@ -14,4 +14,4 @@ services:
     command: python -m flask run --host=0.0.0.0
     volumes:
       - .:/usr/src/app
-      - /tmp/web_files:/tmp/web_files
+      - ./test/data/web_root:/var/www

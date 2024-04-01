@@ -1,6 +1,9 @@
 from flask import Flask
+from web_files.site import site
 
-app = Flask(__name__)
-app.config.from_prefixed_env()
 
-from .views import *
+def create_app():
+    app = Flask(__name__)
+    app.config.from_prefixed_env()
+    app.register_blueprint(site, url_prefix='/')
+    return app
