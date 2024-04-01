@@ -1,0 +1,17 @@
+version: "3.9"
+services:
+  app:
+    image: "web_files_app:dev"
+    build:
+      context: .
+      dockerfile: ./dockers/app/Dockerfile
+    ports:
+      - 5000:5000
+    environment:
+      FLASK_APP: web_files
+      FLASK_ENV: development
+      FLASK_SITE_TITLE: Web File Manager
+    command: python -m flask run --host=0.0.0.0
+    volumes:
+      - .:/usr/src/app
+      - /tmp/web_files:/tmp/web_files

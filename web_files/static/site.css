@@ -1,0 +1,57 @@
+body {
+    font-size: 16px;
+}
+
+div#content {
+    width: 100%;
+}
+
+pre {
+    white-space: pre-wrap;
+}
+
+.code {
+    font-size: 1em;
+    font-family: monospace;
+}
+
+.text-left {
+    text-align: left;
+}
+
+.text-right {
+    text-align: right;
+}
+
+.text-center {
+    text-align: center;
+}
+
+.text-heavy {
+    font-weight: 600;
+}
+
+table.code {
+    border: 2px solid;
+    border-spacing: 0;
+    border-color: #000;
+}
+
+table.code td, th {
+    border-spacing: 0;
+    border-style: none;
+    padding: .25em;
+}
+
+table.code th {
+    color: #FFF;
+    background-color: #000;
+    padding-top: .5em;
+    padding-bottom: .5em;
+    text-transform: uppercase;
+    font-size: 1.1em;
+}
+
+table.code tr:nth-child(odd) {
+    background-color: #C0C0C0;
+}
