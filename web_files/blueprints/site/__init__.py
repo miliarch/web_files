@@ -7,4 +7,4 @@ site = Blueprint(
     static_folder='static'
 )
 
-from . import views
+from web_files.blueprints.site import views

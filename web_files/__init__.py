@@ -1,5 +1,5 @@
 from flask import Flask
-from web_files.site import site
+from web_files.blueprints import site
 
 
 def create_app():

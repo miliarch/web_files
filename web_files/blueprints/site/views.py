@@ -1,6 +1,6 @@
 from flask import redirect, render_template
 from pathlib import Path
-from web_files.site import site
+from web_files.blueprints.site import site
 
 
 def list_directory_contents(path, pattern='*'):
