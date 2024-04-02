@@ -8,9 +8,10 @@ services:
     ports:
       - 5000:5000
     environment:
-      FLASK_APP: web_files
+      FLASK_APP: app
       FLASK_ENV: development
-      FLASK_SITE_TITLE: Web File Manager
+      FLASK_WEB_FILES_SITE_TITLE: Web File Manager
+      FLASK_WEB_FILES_WEB_ROOT: /var/www
     command: python -m flask run --host=0.0.0.0
     volumes:
       - .:/usr/src/app

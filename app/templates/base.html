@@ -3,13 +3,13 @@
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>{% block title %}{{ config.SITE_TITLE }}{% endblock %}</title>
+    <title>{% block title %}Some App{% endblock %}</title>
     <link rel= "stylesheet" type="text/css" href= "{{ url_for('static', filename='style.css') }}">
 </head>
 <body>
     {%- block header %}
     <header>
-        <h1>{{ config.SITE_TITLE }}</h1>
+        <h1>Some App</h1>
     </header>
     {% endblock %}
     {%- block nav %}
