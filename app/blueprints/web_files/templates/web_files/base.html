@@ -1,0 +1,17 @@
+{% extends 'base.html' %}
+{% block title %}{{ config.SITE_TITLE }}{% endblock %}
+{%- block header %}
+    <header>
+        <h1>{{ config.SITE_TITLE }} - Web Files</h1>
+    </header>
+{% endblock %}
+{%- block nav %}
+     <nav>
+        <a href="{{ url_for('web_files.file_manager') }}">File Manager</a> |
+        <a href="{{ url_for('web_files.debug') }}">Debug</a>
+    </nav>
+{% endblock %}
+{%- block content %}
+        <h2>Base</h2>
+        <p>This is the base template</p>
+{%- endblock %}
