@@ -3,6 +3,8 @@
 {% block content %}
         <h2>File manager</h2>
         <p>This will be the file manager</p>
+        <p>The requested directory is: {{ directory }}
+        <p>The web root is: {{ web_root | string }} ({{ web_root.parts | length }} parts - {{ web_root.parts }})</p>
         <table class="code">
             <tr>
                 <th>Name</th>
@@ -10,7 +12,7 @@
             </tr>
             {%- for file in files %}
             <tr>
-                <td>{{ file | string }}</td>
+                <td>{{ file.stem }}</td>
                 <td>{{ 'file' if not file.is_dir() else 'dir' }}
             </tr>
             {% endfor %}
