@@ -55,3 +55,22 @@ table.code th {
 table.code tr:nth-child(odd) {
     background-color: #C0C0C0;
 }
+
+.icon a {
+    color: #FFF;
+    text-decoration: none;
+}
+
+th.icon {
+    vertical-align: top;
+    width: 25px;
+}
+
+table#file-manager {
+    width: 100%;
+    font-size: .8em;
+}
+
+table#file-manager th {
+    text-transform: none;
+}

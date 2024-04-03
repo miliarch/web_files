@@ -12,7 +12,14 @@ services:
       FLASK_ENV: development
       FLASK_WEB_FILES_SITE_TITLE: Web File Manager
       FLASK_WEB_FILES_WEB_ROOT: /var/www
+      FLASK_WEB_FILES_DOMAIN_ROOT: http://localhost:5001
     command: python -m flask run --host=0.0.0.0
     volumes:
       - .:/usr/src/app
       - ./test/data/web_root:/var/www
+  web:
+    image: "nginx:stable-alpine"
+    ports:
+      - 5001:80
+    volumes:
+      - ./test/data/web_root:/usr/share/nginx/html
