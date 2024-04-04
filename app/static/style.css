@@ -1,5 +1,6 @@
 body {
     font-size: 16px;
+    font-family: "Open Sans", sans-serif;
 }
 
 div#content {
@@ -12,7 +13,7 @@ pre {
 
 .code {
     font-size: 1em;
-    font-family: monospace;
+    font-family: "Source Code Pro", monospace;
 }
 
 .text-left {
@@ -56,21 +57,59 @@ table.code tr:nth-child(odd) {
     background-color: #C0C0C0;
 }
 
-.icon a {
-    color: #FFF;
+div#file-manager .icon {
+    padding: 0 7px 0 7px;
+    vertical-align: center;
+    width: 100px;
+    font-size: 1.5em;
+}
+
+div#file-manager .icon a {
     text-decoration: none;
 }
 
-th.icon {
-    vertical-align: top;
+div#file-manager div.icon a {
+    color: #FFF;
+}
+
+div#file-manager td.icon a {
+    color: #FF0000;
+}
+
+div#file-manager {
+    display: table;
+    width: 100%;
+}
+
+div#file-manager table {
+    width: 100%;
+    font-size: 1em;
+}
+
+div#file-manager div.header {
+    background-color: #000;
+    display: table-row;
+    color: #FFF;
+}
+
+div#file-manager div .controls {
+    font-size: 1.3em;
+    padding: 0 7px 0 7px;
+    display: inline-block;
+}
+
+div#file-manager div.path {
+    display: inline-block;
+}
+
+div#file-manager table .controls {
     width: 25px;
 }
 
-table#file-manager {
-    width: 100%;
-    font-size: .8em;
+div #file-manager .mtime {
+    width: 35%;
 }
 
-table#file-manager th {
-    text-transform: none;
+div #file-manager .size {
+    width: 15%;
 }

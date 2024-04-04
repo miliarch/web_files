@@ -1,3 +1,4 @@
+from datetime import datetime
 from flask import redirect, render_template, current_app, url_for, abort
 from pathlib import Path
 from app.blueprints.web_files import web_files
@@ -34,6 +35,12 @@ def generate_full_directory_path(directory):
 def generate_domain_root_url(file):
     domain_root = current_app.config['WEB_FILES_DOMAIN_ROOT']
     return f'{domain_root}/{generate_web_root_relative_path(file)}'
+
+
+@web_files.app_template_filter('format_file_mtime')
+def format_file_mtime(mtime):
+    dt = datetime.utcfromtimestamp(mtime)
+    return dt.strftime('%Y-%m-%d %H:%M:%S')
 
 
 @web_files.route('/')

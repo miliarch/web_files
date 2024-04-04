@@ -2,25 +2,37 @@
 {% block title %}{{ config.WEB_FILES_SITE_TITLE }}{% endblock %}
 {% block content %}
         <h2>File manager</h2>
-        <table id="file-manager" class="code">
-            <tr>
-                <th class="icon text-center">
-            {%- if files[0] | generate_parent_web_root_relative_path != '.' %}
-                <a href="{{ url_for('web_files.file_manager_browse', directory=files[0] | generate_parent_web_root_relative_path) }}">↰</a>
-            {%- else %}
-                ⛺
-            {%- endif %}
-                </th>
-                <th class="dir-widget text-left">{{ '' if directory == '.' else '/{}'.format(directory) }}/</th>
-            </tr>
-            {%- for file in files %}
-            <tr>
-                {%- if file.is_dir() %}
-                <td colspan="2"><a href="{{ url_for('web_files.file_manager_browse', directory=file | generate_web_root_relative_path) }}">{{ file.name }}/</a></td>
-                {%- else %}
-                <td colspan="2"><a href="{{ file | generate_domain_root_url }}">{{ file.name }}</a></td>
-                {%- endif %}
-            </tr>
-            {%- endfor %}
-        </table>
+        <div id="file-manager">
+            <div class="header code">
+                <div class="controls icon text-left">
+                    <a href="{{ url_for('web_files.file_manager_browse', directory='.') }}">⛺</a>
+                    <a href="{{ url_for('web_files.file_manager_browse', directory=files[0] | generate_parent_web_root_relative_path) }}">↰</a>
+                    <a href="TODO-UPLOAD">⤴</a>
+                </div>
+                <div class="path text-left">
+                    {{ '' if directory == '.' else '/{}'.format(directory) }}/
+                </div>
+            </div>
+            <table class="code">
+                <tr>
+                    <th class="controls icon text-left"></th>
+                    <th class="filename text-left">File</th>
+                    <th class="mtime text-left">Date</th>
+                    <th class="size text-left">Bytes</th>
+                </tr>
+                {%- for file in files %}
+                {%- set stat = file.stat() %}
+                <tr>
+                    <td class="controls icon"><a href="TODO-DELETE">x</a></td>
+                    {%- if file.is_dir() %}
+                    <td class="filename"><a href="{{ url_for('web_files.file_manager_browse', directory=file | generate_web_root_relative_path) }}">{{ file.name }}/</a></td>
+                    {%- else %}
+                    <td class="filename"><a href="{{ file | generate_domain_root_url }}">{{ file.name }}</a></td>
+                    {%- endif %}
+                    <td class="mtime">{{ stat.st_mtime | format_file_mtime }}</td>
+                    <td class="size">{{ stat.st_size }}</td>
+                </tr>
+                {%- endfor %}
+            </table>
+        </div>
 {%- endblock %}
