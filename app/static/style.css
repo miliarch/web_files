@@ -113,3 +113,14 @@ div #file-manager .mtime {
 div #file-manager .size {
     width: 15%;
 }
+
+div#file-manager div.upload-form {
+    display: inline-block;
+    align: right;
+    margin-left: 100px;
+    margin-bottom: 10px;
+}
+
+div#file-manager div.upload-form input[type=file] {
+    font-family: "Source Code Pro", monospace;
+}

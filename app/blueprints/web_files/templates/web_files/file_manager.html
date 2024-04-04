@@ -7,10 +7,16 @@
                 <div class="controls icon text-left">
                     <a href="{{ url_for('web_files.file_manager_browse', directory='.') }}">⛺</a>
                     <a href="{{ url_for('web_files.file_manager_browse', directory=files[0] | generate_parent_web_root_relative_path) }}">↰</a>
-                    <a href="TODO-UPLOAD">⤴</a>
                 </div>
                 <div class="path text-left">
                     {{ '' if directory == '.' else '/{}'.format(directory) }}/
+                </div>
+                <div class="upload-form">
+                    <form method=post enctype=multipart/form-data action="{{ url_for('web_files.file_manager_upload') }}">
+                        <input type="hidden" name="directory" value="{{ directory }}">
+                        <input type="submit" value="Upload">
+                        <input type="file" name="file">
+                    </form>
                 </div>
             </div>
             <table class="code">

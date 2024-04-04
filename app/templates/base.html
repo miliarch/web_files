@@ -14,11 +14,24 @@
     </header>
     {% endblock %}
     {%- block nav %}
-     <nav>
+    <nav>
         <a href="/path/to/link">Link 1</a> |
         <a href="/path/to/link">Link 2</a>
     </nav>
     {% endblock %}
+    {%- block flashes %}
+    <div id="flashes">
+    {%- with messages = get_flashed_messages() %}
+        {%- if messages %}
+        <ul class=flashes>
+          {%- for message in messages %}
+          <li>{{ message }}</li>
+          {%- endfor %}
+        </ul>
+        {%- endif %}
+    </div>
+    {%- endwith %}
+    {%- endblock %}
     <div id=content>
     {%- block content %}
         <h2>Base</h2>

@@ -1,6 +1,7 @@
 from datetime import datetime
-from flask import redirect, render_template, current_app, url_for, abort
+from flask import redirect, render_template, current_app, url_for, abort, request, flash
 from pathlib import Path
+from werkzeug.utils import secure_filename
 from app.blueprints.web_files import web_files
 
 
@@ -67,6 +68,34 @@ def file_manager_browse(directory='.'):
         directory=directory,
         files=files,
     )
+
+
+@web_files.route('/upload', methods=['POST'])
+def file_manager_upload():
+    directory = request.form.get('directory')
+
+    if not directory:
+        current_app.logger.debug(f'directory provided: {directory}')
+        flash('No directory provided')
+        return redirect(url_for('web_files.file_manager_browse', directory='.'))
+
+    if 'file' not in request.files:
+        flash('No file in request')
+        return redirect(url_for('web_files.file_manager_browse', directory=directory))
+
+    file = request.files['file']
+    if file.filename == '':
+        flash('No file selected')
+        return redirect(url_for('web_files.file_manager_browse', directory=directory))
+
+    filename = secure_filename(file.filename)
+    base_path = generate_full_directory_path(directory)
+    if file and base_path.exists():
+        full_path = base_path.joinpath(filename)
+        file.save(full_path)
+
+    # redirect to previous directory
+    return redirect(url_for('web_files.file_manager_browse', directory=directory))
 
 
 @web_files.route('/debug')
