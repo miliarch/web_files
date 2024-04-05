@@ -5,6 +5,10 @@ services:
     build:
       context: .
       dockerfile: ./dockers/app/Dockerfile
+      args:
+        USER_ID: ${USER_ID}
+        USER_NAME: dev
+    user: "${USER_ID}:${USER_ID}"
     ports:
       - 5000:5000
     environment:
@@ -16,7 +20,7 @@ services:
       FLASK_SECRET_KEY: "Som3th1ng |2eally SSSecret"
     command: python -m flask run --host=0.0.0.0
     volumes:
-      - .:/usr/src/app
+      - .:/app
       - ./test/data/web_root:/var/www
   web:
     image: "nginx:stable-alpine"
