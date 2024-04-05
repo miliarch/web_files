@@ -29,7 +29,7 @@
                 {%- for file in files %}
                 {%- set stat = file.stat() %}
                 <tr>
-                    <td class="controls icon"><a href="TODO-DELETE">x</a></td>
+                    <td class="controls icon"><a href="#speedbump" onclick="speedbumpDelete('{{ file | generate_web_root_relative_path }}')">x</a></td>
                     {%- if file.is_dir() %}
                     <td class="filename"><a href="{{ url_for('web_files.file_manager_browse', directory=file | generate_web_root_relative_path) }}">{{ file.name }}/</a></td>
                     {%- else %}
@@ -40,5 +40,26 @@
                 </tr>
                 {%- endfor %}
             </table>
+            <script>
+                async function speedbumpDelete(path) {
+                    if (confirm(`Really delete ${path}?`) == true) {
+                        // redirect to delete endpoint
+                        await fetch(`{{ url_for('web_files.file_manager_delete') }}`, {
+                            method: "DELETE",
+                            body: JSON.stringify({
+                                path: `${path}`,
+                                directory: '{{ directory }}',
+                            }),
+                            headers: {
+                                "Content-type": "application/json; charset=UTF-8",
+                            }
+                        }).then(function(response) {
+                            return response.json();
+                        }).then(function(data) {
+                            window.location.href = data.redirect;
+                        });
+                    }
+                }
+            </script>
         </div>
 {%- endblock %}

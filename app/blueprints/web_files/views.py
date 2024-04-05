@@ -1,5 +1,5 @@
 from datetime import datetime
-from flask import redirect, render_template, current_app, url_for, abort, request, flash
+from flask import redirect, render_template, current_app, url_for, abort, request, flash, jsonify
 from pathlib import Path
 from werkzeug.utils import secure_filename
 from app.blueprints.web_files import web_files
@@ -96,6 +96,35 @@ def file_manager_upload():
 
     # redirect to previous directory
     return redirect(url_for('web_files.file_manager_browse', directory=directory))
+
+
+@web_files.route('/delete', methods=['DELETE'])
+def file_manager_delete():
+    payload = request.get_json()
+    path = Path(payload['path'])
+    directory = Path(payload['directory'])
+    full_path = generate_full_directory_path(path)
+
+    if full_path.is_dir():
+        try:
+            full_path.rmdir()
+            flash(f'Directory "{path}" removed successfully')
+        except IOError:
+            flash(f'Directory "{path}" must be empty before it can be deleted')
+    else:
+        try:
+            full_path.unlink(missing_ok=False)
+            flash(f'File "{path}" removed successfully')
+        except IOError:
+            flash(f'Error accessing file "{path}"')
+        except FileNotFoundError:
+            flash(f'File "{path}" does not exist')
+
+        response = {
+            'redirect': url_for('web_files.file_manager_browse', directory=directory)
+        }
+
+    return jsonify(response)
 
 
 @web_files.route('/debug')
