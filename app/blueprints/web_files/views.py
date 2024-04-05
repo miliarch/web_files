@@ -160,8 +160,3 @@ def file_manager_create():
 
     # redirect to previous directory
     return redirect(url_for('web_files.file_manager_browse', directory=directory))
-
-
-@web_files.route('/debug')
-def debug():
-    return render_template('web_files/debug.html')

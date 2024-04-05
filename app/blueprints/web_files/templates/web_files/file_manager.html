@@ -1,7 +1,6 @@
 {% extends 'web_files/base.html' %}
 {% block title %}{{ config.WEB_FILES_SITE_TITLE }}{% endblock %}
 {% block content %}
-        <h2>File manager</h2>
         <div class="upload-form">
             <form method=post enctype=multipart/form-data action="{{ url_for('web_files.file_manager_upload') }}">
                 <input type="hidden" name="directory" value="{{ directory }}">
