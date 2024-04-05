@@ -77,7 +77,6 @@ def file_manager_upload():
     directory = request.form.get('directory')
 
     if not directory:
-        current_app.logger.debug(f'directory provided: {directory}')
         flash('No directory provided')
         return redirect(url_for('web_files.file_manager_browse', directory='.'))
 
@@ -107,13 +106,13 @@ def file_manager_delete():
     directory = Path(payload['directory'])
     full_path = generate_full_directory_path(path)
 
-    if full_path.is_dir():
+    if full_path.exists() and full_path.is_dir():
         try:
             full_path.rmdir()
             flash(f'Directory "{path}" removed successfully')
         except IOError:
             flash(f'Directory "{path}" must be empty before it can be deleted')
-    else:
+    elif full_path.exists() and full_path.is_file():
         try:
             full_path.unlink(missing_ok=False)
             flash(f'File "{path}" removed successfully')
@@ -121,12 +120,46 @@ def file_manager_delete():
             flash(f'Error accessing file "{path}"')
         except FileNotFoundError:
             flash(f'File "{path}" does not exist')
+    else:
+        flash(f'File or directory "{path}" does not exist')
 
-        response = {
-            'redirect': url_for('web_files.file_manager_browse', directory=directory)
-        }
+    response = {
+        'redirect': url_for('web_files.file_manager_browse', directory=directory)
+    }
 
     return jsonify(response)
+
+
+@web_files.route('/create', methods=['POST'])
+def file_manager_create():
+    directory = request.form.get('directory')
+    name = request.form.get('name')
+
+    if not directory:
+        flash('No destination directory provided')
+        return redirect(url_for('web_files.file_manager_browse', directory='.'))
+
+    if not name:
+        flash('No new directory name provided')
+        return redirect(url_for('web_files.file_manager_browse', directory='.'))
+
+    filename = secure_filename(name)
+    base_path = generate_full_directory_path(directory)
+    if base_path.exists():
+        full_path = base_path.joinpath(filename)
+        if not full_path.exists():
+            try:
+                full_path.mkdir()
+                flash(f'Directory "{full_path}" created successfully')
+            except IOError:
+                flash(f'Directory "{full_path}" failed to create')
+        elif full_path.is_dir():
+            flash(f'Directory "{full_path}" already exists')
+        elif full_path.is_file():
+            flash(f'File "{full_path}" already exists')
+
+    # redirect to previous directory
+    return redirect(url_for('web_files.file_manager_browse', directory=directory))
 
 
 @web_files.route('/debug')

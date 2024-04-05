@@ -2,22 +2,27 @@
 {% block title %}{{ config.WEB_FILES_SITE_TITLE }}{% endblock %}
 {% block content %}
         <h2>File manager</h2>
+        <div class="upload-form">
+            <form method=post enctype=multipart/form-data action="{{ url_for('web_files.file_manager_upload') }}">
+                <input type="hidden" name="directory" value="{{ directory }}">
+                <input type="submit" value="Upload File">
+                <input type="file" name="file">
+            </form>
+        </div>
+        <div class="create-form">
+            <form method=post enctype=multipart/form-data action="{{ url_for('web_files.file_manager_create') }}">
+                <input type="hidden" name="directory" value="{{ directory }}">
+                <input type="submit" value="Create Directory">
+                <input type="text" name="name" placeholder="Directory name">
+            </form>
+        </div>
         <div id="file-manager">
             <div class="header code">
                 <div class="controls icon text-left">
                     <a href="{{ url_for('web_files.file_manager_browse', directory='.') }}">⛺</a>
                     <a href="{{ url_for('web_files.file_manager_browse', directory=parent_directory) }}">↰</a>
                 </div>
-                <div class="path text-left">
-                    {{ '' if directory == '.' else '/{}'.format(directory) }}/
-                </div>
-                <div class="upload-form">
-                    <form method=post enctype=multipart/form-data action="{{ url_for('web_files.file_manager_upload') }}">
-                        <input type="hidden" name="directory" value="{{ directory }}">
-                        <input type="submit" value="Upload">
-                        <input type="file" name="file">
-                    </form>
-                </div>
+                <div class="path text-left">{{ '' if directory.name == '' else '/{}'.format(directory) }}/</div>
             </div>
             <table class="code">
                 <tr>
