@@ -9,12 +9,9 @@ def list_directory_contents(path, pattern='*'):
     return list(Path(path).glob(pattern))
 
 
-@web_files.app_template_filter('generate_parent_web_root_relative_path')
-def generate_parent_web_root_relative_path(path):
-    relative_path = Path(generate_web_root_relative_path(path))
-    if len(relative_path.parents) > 1:
-        return relative_path.parents[1]
-    return '.'
+@web_files.app_template_filter('generate_parent_path')
+def generate_parent_path(path):
+    return Path(path).parents[0] if Path(path).parents else '.'
 
 
 @web_files.app_template_filter('generate_web_root_relative_path')
@@ -56,6 +53,10 @@ def file_manager_browse(directory='.'):
     full_path = generate_full_directory_path(directory)
     files = list_directory_contents(full_path, '*')
 
+    # build paths to use in templates
+    current_directory = Path(directory)
+    parent_directory = generate_parent_path(current_directory)
+
     # sort files by filename (stem) alphabetically in ascending order
     files.sort(key=lambda x: x.stem)
 
@@ -65,7 +66,8 @@ def file_manager_browse(directory='.'):
 
     return render_template(
         'web_files/file_manager.html',
-        directory=directory,
+        directory=current_directory,
+        parent_directory=parent_directory,
         files=files,
     )
 

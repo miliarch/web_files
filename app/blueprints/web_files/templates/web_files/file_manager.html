@@ -6,7 +6,7 @@
             <div class="header code">
                 <div class="controls icon text-left">
                     <a href="{{ url_for('web_files.file_manager_browse', directory='.') }}">⛺</a>
-                    <a href="{{ url_for('web_files.file_manager_browse', directory=files[0] | generate_parent_web_root_relative_path) }}">↰</a>
+                    <a href="{{ url_for('web_files.file_manager_browse', directory=parent_directory) }}">↰</a>
                 </div>
                 <div class="path text-left">
                     {{ '' if directory == '.' else '/{}'.format(directory) }}/
@@ -26,6 +26,7 @@
                     <th class="mtime text-left">Date</th>
                     <th class="size text-left">Bytes</th>
                 </tr>
+                {%- if files %}
                 {%- for file in files %}
                 {%- set stat = file.stat() %}
                 <tr>
@@ -39,6 +40,14 @@
                     <td class="size">{{ stat.st_size }}</td>
                 </tr>
                 {%- endfor %}
+                {%- else %}
+                <tr>
+                    <td class="controls icon"></td>
+                    <td class="filename">Directory is empty</td>
+                    <td class="mtime"></td>
+                    <td class="size"></td>
+                </tr>
+                {%- endif %}
             </table>
             <script>
                 async function speedbumpDelete(path) {
