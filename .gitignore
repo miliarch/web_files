@@ -1,5 +1,5 @@
 __pycache__
 .sublime-project*
 venv
-data
-test/data
+data/
+!test/data/
