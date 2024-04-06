@@ -77,16 +77,16 @@ def file_manager_upload():
     directory = request.form.get('directory')
 
     if not directory:
-        flash('No directory provided')
+        flash('No directory provided', 'error')
         return redirect(url_for('web_files.file_manager_browse', directory='.'))
 
     if 'file' not in request.files:
-        flash('No file in request')
+        flash('No file in request', 'error')
         return redirect(url_for('web_files.file_manager_browse', directory=directory))
 
     file = request.files['file']
     if file.filename == '':
-        flash('No file selected')
+        flash('No file selected', 'error')
         return redirect(url_for('web_files.file_manager_browse', directory=directory))
 
     filename = secure_filename(file.filename)
@@ -94,6 +94,7 @@ def file_manager_upload():
     if file and base_path.exists():
         full_path = base_path.joinpath(filename)
         file.save(full_path)
+        flash(f'File {filename} uploaded successfully', 'success')
 
     # redirect to previous directory
     return redirect(url_for('web_files.file_manager_browse', directory=directory))
@@ -109,19 +110,19 @@ def file_manager_delete():
     if full_path.exists() and full_path.is_dir():
         try:
             full_path.rmdir()
-            flash(f'Directory "{path}" removed successfully')
+            flash(f'Directory "{path}" removed successfully', 'success')
         except IOError:
-            flash(f'Directory "{path}" must be empty before it can be deleted')
+            flash(f'Directory "{path}" must be empty before it can be deleted', 'error')
     elif full_path.exists() and full_path.is_file():
         try:
             full_path.unlink(missing_ok=False)
-            flash(f'File "{path}" removed successfully')
+            flash(f'File "{path}" removed successfully', 'success')
         except IOError:
-            flash(f'Error accessing file "{path}"')
+            flash(f'Error accessing file "{path}"', 'error')
         except FileNotFoundError:
-            flash(f'File "{path}" does not exist')
+            flash(f'File "{path}" does not exist', 'error')
     else:
-        flash(f'File or directory "{path}" does not exist')
+        flash(f'File or directory "{path}" does not exist', 'error')
 
     response = {
         'redirect': url_for('web_files.file_manager_browse', directory=directory)
@@ -136,11 +137,11 @@ def file_manager_create():
     name = request.form.get('name')
 
     if not directory:
-        flash('No destination directory provided')
+        flash('No destination directory provided', 'error')
         return redirect(url_for('web_files.file_manager_browse', directory='.'))
 
     if not name:
-        flash('No new directory name provided')
+        flash('No new directory name provided', 'error')
         return redirect(url_for('web_files.file_manager_browse', directory='.'))
 
     filename = secure_filename(name)
@@ -150,13 +151,13 @@ def file_manager_create():
         if not full_path.exists():
             try:
                 full_path.mkdir()
-                flash(f'Directory "{full_path}" created successfully')
+                flash(f'Directory "{full_path}" created successfully', 'success')
             except IOError:
-                flash(f'Directory "{full_path}" failed to create')
+                flash(f'Directory "{full_path}" failed to create', 'error')
         elif full_path.is_dir():
-            flash(f'Directory "{full_path}" already exists')
+            flash(f'Directory "{full_path}" already exists', 'error')
         elif full_path.is_file():
-            flash(f'File "{full_path}" already exists')
+            flash(f'File "{full_path}" already exists', 'error')
 
     # redirect to previous directory
     return redirect(url_for('web_files.file_manager_browse', directory=directory))
