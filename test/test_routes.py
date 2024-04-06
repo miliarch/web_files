@@ -19,15 +19,26 @@ def test_get_response_code_browse_base(client):
     assert response.status_code == 200
 
 
-def test_get_response_code_browse_dir1(client):
+def test_get_response_code_browse_dir1(client, web_root):
+    query_dir = web_root.joinpath('dir1')
+    if not query_dir.exists():
+        query_dir.mkdir()
+    assert query_dir.exists
     response = client.get('/files/browse/dir1')
     assert response.status_code == 200
+    query_dir.rmdir()
+    assert not query_dir.exists()
 
 
 def test_upload_success(client, web_root):
     # Scaffold test
     source_file = web_root.joinpath('file1.txt')
+    if not source_file.exists():
+        source_file.write_bytes(b'hello tester')
     dest_file = web_root.joinpath('dir1/file1.txt')
+    if not dest_file.parent.exists():
+        # dir has to exist before file is written to it
+        dest_file.parent.mkdir()
     if dest_file.exists():
         dest_file.unlink()
     expected_flash_message = f'File {source_file.name} uploaded successfully'
@@ -50,6 +61,7 @@ def test_upload_success(client, web_root):
 
     # Inspect results
     with client.session_transaction() as session:
+        assert 'success' in dict(session['_flashes'])
         flash_message = dict(session['_flashes']).get('success')
         assert flash_message == expected_flash_message
 
@@ -60,7 +72,11 @@ def test_upload_success(client, web_root):
 
     # Clean up
     dest_file.unlink()
+    dest_file.parent.rmdir()
+    source_file.unlink()
     assert not dest_file.exists()
+    assert not dest_file.parent.exists()
+    assert not source_file.exists()
 
 
 def test_delete_file_success(client, web_root):
