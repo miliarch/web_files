@@ -64,11 +64,14 @@ def file_manager_browse(directory='.'):
     # False == 0, True == 1, thus True orders after False ascending
     files.sort(key=lambda x: x.is_file())
 
+    # filter out dotfiles (like .gitignore)
+    filtered_files = list(filter(lambda file: file.name[0] != '.', files))
+
     return render_template(
         'web_files/file_manager.html',
         directory=current_directory,
         parent_directory=parent_directory,
-        files=files,
+        files=filtered_files,
     )
 
 
